@@ -115,11 +115,11 @@ runs/           # 操作日志（对齐云图 Atlas 模式）
    - Web 搜索用于 query 时，不得把 private 内容带入 query
 
 3. **与其他项目的隔离**
-   - 本 vault **不读写**以下路径：
+   - 本 vault **不读写**相邻项目目录（示例，实际由 `.claude/settings.local.json` 的 deny 列表执行）：
      - `~/.local/lib/3body/**`
-     - `F:/Icloud/iCloudDrive/Anthropic/新媒体发布系统*/`
-     - `F:/Icloud/iCloudDrive/Anthropic/云图Atlas工作系统/`
-     - `F:/Icloud/iCloudDrive/Anthropic/国际贸易*/`
+     - `<parent-dir>/新媒体发布系统*/`
+     - `<parent-dir>/云图Atlas工作系统/`
+     - `<parent-dir>/国际贸易*/`
    - 跨项目知识以内部 wiki 页承载（业务经验归档到 `wiki/topics/business/`）
 
 ## 八、Lint 质量门禁（CRITICAL 拒绝合并）

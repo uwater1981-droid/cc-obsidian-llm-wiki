@@ -1,6 +1,5 @@
 ---
 title: Test Article about LLM Wiki
-author: Vincent
 date: 2026-04-17
 source: https://example.com/test
 ---

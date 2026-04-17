@@ -51,7 +51,7 @@ Ingest (摄取)  ─→  Query (查询)  ─→  Lint (巡检)
 #    在 Settings → Community plugins 中启用五个推荐插件（见下）
 
 # 2. 用 Claude Code 打开本目录作为工作目录
-cd "F:/Icloud/iCloudDrive/Anthropic/cc+obisidian学习复利机制"
+cd path/to/cc-obsidian-llm-wiki
 
 # 3. 放入第一份原始资料
 cp <某篇文章.md> raw/articles/
