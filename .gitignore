@@ -71,5 +71,12 @@ raw/web-clips/*.pdf
 wiki/_attachments/
 raw/attachments/
 
+# Broken Links Cleaner / Find Unlinked Files 扫描产物（一次性诊断报告，看完即弃）
+/broken links output.md
+/empty files.md
+/broken-links-*.md
+/find-unlinked-*.md
+/find-orphaned-*.md
+
 # 本地个性化覆盖（可选，用户自行扩展）
 .claude/settings.override.json
