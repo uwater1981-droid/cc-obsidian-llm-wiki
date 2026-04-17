@@ -88,13 +88,28 @@ def scan_wiki(wiki_root: Path) -> dict[str, WikiPage]:
     return pages
 
 
-def find_dead_links(pages: dict[str, WikiPage]) -> list[tuple[str, str]]:
-    """返回 [(source_slug, dead_link_target), ...]"""
+def find_dead_links(pages: dict[str, WikiPage], wiki_root: Path) -> list[tuple[str, str]]:
+    """返回 [(source_slug, dead_link_target), ...]
+
+    规则：
+    - 简单 slug 链接 [[foo]]：在 pages 字典中查找
+    - 路径式链接 [[../../raw/...]] 或 [[topic/foo]]：通过文件系统解析
+    - 跨层引用 raw/ 是合法的，不计死链（只要文件存在）
+    """
     dead: list[tuple[str, str]] = []
+    vault = wiki_root.parent
     for slug, page in pages.items():
+        page_dir = (vault / page.path).parent
         for link in page.outbound:
-            bare = link.split("/")[-1]
-            if bare not in pages:
+            # 路径式链接（含 / 或 .md 后缀）
+            if "/" in link or link.endswith(".md"):
+                target_rel = link if link.endswith(".md") else f"{link}.md"
+                resolved = (page_dir / target_rel).resolve()
+                if not resolved.exists():
+                    dead.append((slug, link))
+                continue
+            # 简单 slug 链接
+            if link not in pages:
                 dead.append((slug, link))
     return dead
 
@@ -123,7 +138,7 @@ def main() -> int:
         return 1
 
     pages = scan_wiki(wiki_root)
-    dead = find_dead_links(pages)
+    dead = find_dead_links(pages, wiki_root)
     orphans = find_orphans(pages)
 
     if json_mode:
