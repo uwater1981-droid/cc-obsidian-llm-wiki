@@ -50,6 +50,7 @@ RUNS_DIR = PROJECT_ROOT / "runs" / "ingest"
 
 ART_DIR = PROJECT_ROOT / "raw" / "articles" / "karpathy"
 YT_RAW_DIR = PROJECT_ROOT / "raw" / "transcripts" / "karpathy" / "_raw"
+YT_FINAL_DIR = PROJECT_ROOT / "raw" / "transcripts" / "karpathy"
 GIST_DIR = PROJECT_ROOT / "raw" / "gists" / "karpathy"
 THREADS_FILE = PROJECT_ROOT / "raw" / "notes" / "public" / "karpathy-threads.md"
 
@@ -346,34 +347,151 @@ def fetch_gist(gist_id: str, slug: str, note: str) -> Path:
     return target
 
 
+def _fetch_karpathy_fave_tweets() -> list[dict]:
+    """Parse karpathy.ai/tweets.html — his own hand-curated fave tweets page.
+
+    Structure: each tweet embed is a <blockquote class="twitter-tweet"> with
+    an <a> permalink to twitter.com/<user>/status/<id>. Text is in <p> inside.
+    """
+    resp = requests.get("https://karpathy.ai/tweets.html", headers=UA, timeout=30)
+    resp.raise_for_status()
+    soup = BeautifulSoup(resp.text, "html.parser")
+
+    tweets: list[dict] = []
+    for bq in soup.select("blockquote.twitter-tweet"):
+        links = bq.select("a")
+        permalink = ""
+        for a in links:
+            href = a.get("href", "")
+            if "/status/" in href and href.startswith(("http://", "https://")):
+                permalink = href.split("?", 1)[0]
+                break
+        p = bq.find("p")
+        text = p.get_text(" ", strip=True) if p else bq.get_text(" ", strip=True)
+        # The date is the last <a> inside the <blockquote> (pre-scripts.js rendering)
+        date_text = ""
+        if links:
+            last = links[-1]
+            last_text = last.get_text(strip=True)
+            if re.search(r"(19|20)\d{2}", last_text):
+                date_text = last_text
+        # Author from permalink
+        author = ""
+        m_user = re.search(r"(?:twitter|x)\.com/([^/]+)/status/", permalink)
+        if m_user:
+            author = "@" + m_user.group(1)
+        tweets.append({
+            "url": permalink,
+            "author": author,
+            "date": date_text,
+            "text": text,
+        })
+    return tweets
+
+
 def fetch_threads_aggregated(threads: list[dict]) -> Path:
     THREADS_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+    # Pull curated list from karpathy.ai
+    try:
+        fave_tweets = _fetch_karpathy_fave_tweets()
+    except Exception as exc:
+        print(f"[warn] fave-tweets fetch failed: {exc}", file=sys.stderr)
+        fave_tweets = []
+
     with THREADS_FILE.open("w", encoding="utf-8") as fh:
         write_frontmatter(
             fh,
             {
                 "title": "Karpathy 精选 tweets / X threads",
                 "author": "Andrej Karpathy",
+                "url": "https://karpathy.ai/tweets.html",
                 "fetched_at": datetime.now(TZ).isoformat(timespec="seconds"),
                 "type": "curated-threads",
-                "count": len(threads),
+                "source_count_fave": len(fave_tweets),
+                "source_count_extra": len(threads),
             },
         )
         fh.write("# Karpathy Curated Threads\n\n")
         fh.write(
-            "> X 网站反爬严格,本文件仅登记 URL + 人工备注 + 标签。\n"
-            "> 读原文请直接访问链接,或事后人工粘贴全文到本文件对应条目下方。\n\n"
+            "> Primary source: karpathy.ai/tweets.html (他本人精选的 fave tweets 页)。\n"
+            "> Additional entries: YAML `threads:` 里手工登记的外部爆款线程。\n"
+            "> X 反爬严格,外链 tweet 的正文 _可能_ 为空,需人工补全。\n\n"
         )
+
+        fh.write(f"## Part A — Self-Curated Fave Tweets (from karpathy.ai/tweets.html, {len(fave_tweets)} 条)\n\n")
+        for i, t in enumerate(fave_tweets, 1):
+            header = f"### A{i}."
+            if t.get("date"):
+                header += f" {t['date']}"
+            if t.get("author"):
+                header += f" · {t['author']}"
+            fh.write(header + "\n\n")
+            fh.write(f"> {t['text']}\n\n")
+            if t.get("url"):
+                fh.write(f"- Link: {t['url']}\n\n")
+
+        fh.write(f"\n## Part B — Manually Tracked Threads ({len(threads)} 条)\n\n")
         for i, t in enumerate(threads, 1):
             url = t.get("url", "")
             note = t.get("note", "")
             tags = t.get("tags", [])
-            fh.write(f"## {i}. {note}\n\n")
+            fh.write(f"### B{i}. {note}\n\n")
             fh.write(f"- URL: {url}\n")
             if tags:
                 fh.write(f"- Tags: {', '.join(tags)}\n")
-            fh.write("- Text: _(待人工填入)_\n\n")
+            fh.write("- Text: _(X 反爬,待人工粘贴全文)_\n\n")
+
     return THREADS_FILE
+
+
+def fetch_karcaps(num: str, slug: str, title: str, video_id: str) -> Path:
+    """Fetch a Whisper-generated transcript from averkij/karcaps repo.
+
+    HTML format: each segment is <div class="c"> containing timestamp (<a class="l">)
+    and text (<div class="t">).
+    """
+    url = f"https://raw.githubusercontent.com/averkij/karcaps/main/{num}-large.html"
+    resp = requests.get(url, headers=UA, timeout=45)
+    resp.raise_for_status()
+    soup = BeautifulSoup(resp.text, "html.parser")
+
+    segments: list[tuple[str, str]] = []
+    for block in soup.select("div.c"):
+        ts_tag = block.select_one("a.l")
+        text_tag = block.select_one("div.t")
+        if not ts_tag or not text_tag:
+            continue
+        ts = ts_tag.get("id") or ts_tag.get("href", "").lstrip("#")
+        text = text_tag.get_text(" ", strip=True)
+        if text:
+            segments.append((ts, text))
+
+    YT_FINAL_DIR.mkdir(parents=True, exist_ok=True)
+    target = YT_FINAL_DIR / f"{slug}.md"
+    with target.open("w", encoding="utf-8") as fh:
+        write_frontmatter(
+            fh,
+            {
+                "title": title,
+                "video_id": video_id,
+                "url": f"https://www.youtube.com/watch?v={video_id}",
+                "author": "Andrej Karpathy",
+                "slug": slug,
+                "fetched_at": datetime.now(TZ).isoformat(timespec="seconds"),
+                "type": "youtube-transcript-whisper",
+                "transcript_source": f"https://github.com/averkij/karcaps ({num}-large.html)",
+                "segments": len(segments),
+            },
+        )
+        fh.write(f"# {title}\n\n")
+        fh.write(
+            f"> Video: https://www.youtube.com/watch?v={video_id}\n"
+            f"> Transcript: averkij/karcaps (Whisper-large) `{num}-large.html`\n\n"
+        )
+        for ts, text in segments:
+            fh.write(f"[{ts}] {text}\n\n")
+    return target
 
 
 # ----- orchestration -----
@@ -385,17 +503,17 @@ def run(args: argparse.Namespace) -> int:
         return 2
 
     sources = yaml.safe_load(SOURCES_YAML.read_text(encoding="utf-8"))
-    selected = set(args.filter) if args.filter else {"blogs", "youtube", "gists", "threads"}
+    selected = set(args.filter) if args.filter else {"blogs", "youtube", "gists", "threads", "karcaps"}
     limit = args.limit
 
     log = RunLog()
     seen_paths = manifest_paths()
 
     # Plan summary
-    plan = {k: len(sources.get(k, []) or []) for k in ("blogs", "youtube", "gists", "threads")}
+    plan = {k: len(sources.get(k, []) or []) for k in ("blogs", "youtube", "gists", "threads", "karcaps")}
     if args.dry_run:
         print("=== DRY RUN PLAN ===")
-        for kind in ("blogs", "youtube", "gists", "threads"):
+        for kind in ("blogs", "youtube", "gists", "threads", "karcaps"):
             if kind not in selected:
                 continue
             items = (sources.get(kind) or [])[:limit] if limit else (sources.get(kind) or [])
@@ -409,6 +527,8 @@ def run(args: argparse.Namespace) -> int:
                     print(f"  - {it['slug']}  <- {it['id']}")
                 elif kind == "threads":
                     print(f"  - {it.get('note','')}  <- {it['url']}")
+                elif kind == "karcaps":
+                    print(f"  - {it['slug']}  <- karcaps/{it['num']}-large.html")
         print(f"\nTotals: {plan}")
         return 0
 
@@ -474,6 +594,28 @@ def run(args: argparse.Namespace) -> int:
                 print(f"[fail gist] {slug}: {e}", file=sys.stderr)
                 log.add(FetchResult("gist", slug, GIST_DIR / f"{slug}.md", False, str(e)))
 
+    # karcaps (Whisper transcripts for Zero to Hero 1-4)
+    if "karcaps" in selected:
+        for it in (sources.get("karcaps") or [])[:limit] if limit else (sources.get("karcaps") or []):
+            slug = it["slug"]
+            target_rel = f"raw/transcripts/karpathy/{slug}.md"
+            if target_rel in seen_paths:
+                print(f"[skip karcaps] already in manifest: {slug}")
+                log.add(FetchResult("karcaps", slug, YT_FINAL_DIR / f"{slug}.md", True, error="skipped"))
+                continue
+            try:
+                path = fetch_karcaps(it["num"], slug, it["title"], it["video_id"])
+                append_manifest(
+                    path,
+                    source="karcaps-whisper",
+                    extra={"video_id": it["video_id"], "karcaps_num": it["num"], "stage": "whisper-final"},
+                )
+                print(f"[ok karcaps] {slug}")
+                log.add(FetchResult("karcaps", slug, path, True))
+            except Exception as e:
+                print(f"[fail karcaps] {slug}: {e}", file=sys.stderr)
+                log.add(FetchResult("karcaps", slug, YT_FINAL_DIR / f"{slug}.md", False, str(e)))
+
     # threads (aggregated, always overwrite)
     if "threads" in selected:
         try:
@@ -513,7 +655,7 @@ def run(args: argparse.Namespace) -> int:
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Fetch Andrej Karpathy public outputs.")
     p.add_argument("--dry-run", action="store_true")
-    p.add_argument("--filter", nargs="+", choices=["blogs", "youtube", "gists", "threads"])
+    p.add_argument("--filter", nargs="+", choices=["blogs", "youtube", "gists", "threads", "karcaps"])
     p.add_argument("--limit", type=int, default=None)
     return p.parse_args()
 

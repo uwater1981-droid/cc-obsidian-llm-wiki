@@ -157,9 +157,27 @@ gists:
 
 threads:
   # 精选 tweets / X threads - 汇总到单一 markdown 文件
+  # 主数据源:karpathy.ai/tweets.html(他自己精选的 fave tweets 页)
   - url: https://x.com/karpathy/status/2004607146781278521
     note: "never felt this behind as programmer (2025-12)"
     tags: [programming, ai-shift, skill-issue]
-  - url: https://karpathy.ai/tweets.html
-    note: "Karpathy's self-curated fave tweets page"
-    tags: [meta]
+
+karcaps:
+  # averkij/karcaps 仓库 Whisper 字幕(HTML 格式,仅覆盖 Zero to Hero 01-04)
+  # 源:https://github.com/averkij/karcaps
+  - num: "001"
+    slug: zero-to-hero-01-micrograd-backprop
+    title: "The spelled-out intro to neural networks and backpropagation: building micrograd"
+    video_id: VMj-3S1tku0
+  - num: "002"
+    slug: zero-to-hero-02-makemore-intro-bigram
+    title: "The spelled-out intro to language modeling: building makemore"
+    video_id: PaCmpygFfXo
+  - num: "003"
+    slug: zero-to-hero-03-makemore-mlp
+    title: "Building makemore Part 2: MLP"
+    video_id: TCH_1BHY58I
+  - num: "004"
+    slug: zero-to-hero-04-makemore-batchnorm
+    title: "Building makemore Part 3: Activations & Gradients, BatchNorm"
+    video_id: P6sfmUTpUmc
