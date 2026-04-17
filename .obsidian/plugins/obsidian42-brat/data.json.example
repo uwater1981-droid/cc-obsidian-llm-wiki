@@ -1,0 +1,28 @@
+{
+  "pluginList": [
+    "sarwarkaiser/obsidian-broken-links-cleaner",
+    "Vinzent03/find-unlinked-files"
+  ],
+  "pluginSubListFrozenVersion": [
+    {
+      "repo": "sarwarkaiser/obsidian-broken-links-cleaner",
+      "version": "latest"
+    },
+    {
+      "repo": "Vinzent03/find-unlinked-files",
+      "version": "latest"
+    }
+  ],
+  "themesList": [],
+  "updateAtStartup": true,
+  "updateThemesAtStartup": true,
+  "enableAfterInstall": true,
+  "loggingEnabled": false,
+  "loggingPath": "BRAT-log",
+  "loggingVerboseEnabled": false,
+  "debuggingMode": false,
+  "notificationsEnabled": true,
+  "personalAccessToken": "",
+  "selectLatestPluginVersionByDefault": false,
+  "allowIncompatiblePlugins": false
+}
