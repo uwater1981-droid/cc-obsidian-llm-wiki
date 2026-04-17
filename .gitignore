@@ -45,6 +45,13 @@ venv/
 # 锁文件（iCloud 同步防护）
 .wiki.lock
 
+# Feishu 同步状态(含 doc_token,属个人/租户专属,不入 git)
+scripts/feishu_sync_state.json
+
+# Feishu 同步临时上传目录(放在 runs/feishu/<ts>/_upload/)
+runs/feishu/*/_upload/
+runs/feishu/*/_landing.md
+
 # 运行时临时文件
 runs/**/*.tmp
 runs/**/*.partial
