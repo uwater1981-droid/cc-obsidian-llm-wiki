@@ -30,7 +30,13 @@
       "Edit(runs/**)",
       "Edit(raw/_manifest.jsonl)",
       "Write(wiki/**)",
-      "Write(runs/**)"
+      "Write(runs/**)",
+      "Bash(python -c \"import pypinyin; print\\('pypinyin', pypinyin.__version__\\)\")",
+      "Bash(pip install *)",
+      "Bash(python scripts/mirror_uwater.py --dry-run)",
+      "Bash(python scripts/mirror_uwater.py)",
+      "Bash(python scripts/link-graph.py . --json)",
+      "Bash(python scripts/stale-check.py . --json)"
     ],
     "deny": [
       "Read(raw/notes/private/**)",

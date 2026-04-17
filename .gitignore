@@ -5,6 +5,10 @@
 # 隐私笔记（CLAUDE.md 第七节隐私边界）
 raw/notes/private/
 
+# uwater vault 镜像：路径/中文超出 Windows MAX_PATH，且已有 manifest + 脚本承载审计
+# 重建命令：python scripts/mirror_uwater.py
+raw/notes/public/uwater/
+
 # Obsidian 个性化配置（用户工作区）
 .obsidian/workspace*.json
 .obsidian/cache
