@@ -1,3 +1,10 @@
+---
+title: 术语表
+provenance: query-session
+sources: []
+updated: 2026-04-17
+---
+
 # 术语表
 
 跨领域的标准术语定义。格式：`术语 :: 一句话定义 :: 相关 wiki 页`

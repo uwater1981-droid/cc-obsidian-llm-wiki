@@ -1,3 +1,10 @@
+---
+title: 标签字典
+provenance: query-session
+sources: []
+updated: 2026-04-17
+---
+
 # 标签字典
 
 用于统一四个领域的标签命名。所有 wiki 页 frontmatter 的 tags 字段须从此表挑选。

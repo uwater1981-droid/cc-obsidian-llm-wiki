@@ -1,14 +1,25 @@
+---
+title: Wiki 健康状态
+provenance: query-session
+sources: []
+updated: 2026-04-17
+---
+
 # Wiki 健康状态
 
 > 由 wiki-lint / wiki-deploy-check 自动更新。手动编辑会被覆盖。
 
 ## 最近一次巡检（wiki-lint）
 
-- 时间：2026-04-17 12:00（手工模拟）
+- 时间：2026-04-17 14:10（复核后）
 - 死链：0
 - 孤岛：0
 - 陈旧 TODO：0
+- 陈旧页面：0
 - 冗余页：0
+- 隐私泄漏：0
+- Frontmatter 合规：**✅ 0 CRITICAL**（4 个 meta 页已加 `provenance: query-session` + `sources: []`）
+- 完整报告：[[../../runs/lint/2026-04-17-1406-report]]
 
 ## 最近一次部署闭环检查（wiki-deploy-check）
 
@@ -24,5 +35,8 @@
 |---|---|---|
 | 2026-04-17 10:15 | wiki-ingest 冒烟测试 | 1 raw → 3 wiki pages |
 | 2026-04-17 12:00 | wiki-deploy-check 首次 | 0 CRITICAL / 1 WARN |
+| 2026-04-17 13:59 | ingest: uwater mirror | 1059 md → `raw/notes/public/uwater/` |
+| 2026-04-17 14:06 | wiki-lint 首次全量 | 4 CRITICAL（meta 页缺 sources）|
+| 2026-04-17 14:10 | 选项 A 修复 meta 页 frontmatter | ✅ 0 CRITICAL |
 
 详细报告见 `runs/ingest/` 和 `runs/lint/`。
