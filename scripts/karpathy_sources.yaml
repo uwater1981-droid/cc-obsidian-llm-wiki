@@ -1,0 +1,165 @@
+# Andrej Karpathy 公开产出清单
+# 维护规则：新增源附 slug（kebab-case，无 .md 后缀），按日期排序（旧→新）
+# slug 直接决定 raw 文件名：raw/articles/karpathy/<slug>.md
+
+blogs:
+  # karpathy.ai / karpathy.github.io — 主博客 (2011-2026)
+  - url: https://karpathy.ai/2011/04/27/manually-classifying-cifar10/
+    slug: 2011-04-27-lessons-from-classifying-cifar10
+  - url: https://karpathy.ai/2012/10/22/state-of-computer-vision/
+    slug: 2012-10-22-state-of-computer-vision
+  - url: https://karpathy.ai/2013/11/23/chrome-extension-programming/
+    slug: 2013-11-23-chrome-extension-programming
+  - url: https://karpathy.ai/2013/11/27/quantifying-hacker-news/
+    slug: 2013-11-27-quantifying-hacker-news
+  - url: https://karpathy.ai/2014/04/26/datascience-weekly-interview/
+    slug: 2014-04-26-datascience-weekly-interview
+  - url: https://karpathy.ai/2014/07/02/visualizing-top-tweeps-with-t-sne-in-Javascript/
+    slug: 2014-07-02-visualizing-top-tweeps-tsne
+  - url: https://karpathy.ai/2014/07/03/feature-learning-escapades/
+    slug: 2014-07-03-feature-learning-escapades
+  - url: https://karpathy.ai/2014/08/03/quantifying-productivity/
+    slug: 2014-08-03-quantifying-productivity
+  - url: https://karpathy.ai/2014/09/02/what-i-learned-from-competing-against-a-convnet-on-imagenet/
+    slug: 2014-09-02-competing-against-convnet-on-imagenet
+  - url: https://karpathy.ai/2015/03/30/breaking-convnets/
+    slug: 2015-03-30-breaking-linear-classifiers-imagenet
+  - url: https://karpathy.ai/2015/05/21/rnn-effectiveness/
+    slug: 2015-05-21-rnn-unreasonable-effectiveness
+  - url: https://karpathy.ai/2015/10/25/selfie/
+    slug: 2015-10-25-what-deep-nn-thinks-about-selfie
+  - url: https://karpathy.ai/2015/11/14/ai/
+    slug: 2015-11-14-short-story-cognitive-discontinuity
+  - url: https://karpathy.ai/2016/05/31/rl/
+    slug: 2016-05-31-drl-pong-from-pixels
+  - url: https://karpathy.ai/2016/09/07/phd/
+    slug: 2016-09-07-phd-survival-guide
+  - url: https://karpathy.ai/2019/04/25/recipe/
+    slug: 2019-04-25-recipe-for-training-neural-networks
+  - url: https://karpathy.ai/2020/06/11/biohacking-lite/
+    slug: 2020-06-11-biohacking-lite
+  - url: https://karpathy.ai/2021/03/27/forward-pass/
+    slug: 2021-03-27-short-story-forward-pass
+  - url: https://karpathy.ai/2021/06/21/blockchain/
+    slug: 2021-06-21-bitcoin-from-scratch-python
+  - url: https://karpathy.ai/2022/03/14/lecun1989/
+    slug: 2022-03-14-lecun1989-deep-nets-33-years
+  - url: https://karpathy.ai/2026/02/12/microgpt/
+    slug: 2026-02-12-microgpt
+
+  # karpathy.bearblog.dev — 新博客 (2024-2025)
+  - url: https://karpathy.bearblog.dev/i-love-calculator/
+    slug: 2024-09-08-i-love-calculator
+  - url: https://karpathy.bearblog.dev/digital-hygiene/
+    slug: 2025-03-17-digital-hygiene
+  - url: https://karpathy.bearblog.dev/the-append-and-review-note/
+    slug: 2025-03-19-append-and-review-note
+  - url: https://karpathy.bearblog.dev/power-to-the-people/
+    slug: 2025-03-24-power-to-the-people-llms
+  - url: https://karpathy.bearblog.dev/finding-the-best-sleep-tracker/
+    slug: 2025-04-07-finding-the-best-sleep-tracker
+  - url: https://karpathy.bearblog.dev/vibe-coding-menugen/
+    slug: 2025-04-27-vibe-coding-menugen
+  - url: https://karpathy.bearblog.dev/animals-vs-ghosts/
+    slug: 2025-10-01-animals-vs-ghosts
+  - url: https://karpathy.bearblog.dev/verifiability/
+    slug: 2025-11-17-verifiability
+  - url: https://karpathy.bearblog.dev/the-space-of-minds/
+    slug: 2025-11-29-the-space-of-minds
+  - url: https://karpathy.bearblog.dev/auto-grade-hn/
+    slug: 2025-12-10-auto-grading-old-hn-hindsight
+  - url: https://karpathy.bearblog.dev/chemical-hygiene/
+    slug: 2025-12-18-chemical-hygiene
+  - url: https://karpathy.bearblog.dev/year-in-review-2025/
+    slug: 2025-12-19-llm-year-in-review-2025
+
+youtube:
+  # Neural Networks: Zero to Hero 系列 (8 讲)
+  - video_id: VMj-3S1tku0
+    slug: zero-to-hero-01-micrograd-backprop
+    title: "The spelled-out intro to neural networks and backpropagation: building micrograd"
+  - video_id: PaCmpygFfXo
+    slug: zero-to-hero-02-makemore-intro-bigram
+    title: "The spelled-out intro to language modeling: building makemore"
+  - video_id: TCH_1BHY58I
+    slug: zero-to-hero-03-makemore-mlp
+    title: "Building makemore Part 2: MLP"
+  - video_id: P6sfmUTpUmc
+    slug: zero-to-hero-04-makemore-batchnorm
+    title: "Building makemore Part 3: Activations & Gradients, BatchNorm"
+  - video_id: q8SA3rM6ckI
+    slug: zero-to-hero-05-makemore-backprop-ninja
+    title: "Building makemore Part 4: Becoming a Backprop Ninja"
+  - video_id: t3YJ5hKiMQ0
+    slug: zero-to-hero-06-makemore-wavenet
+    title: "Building makemore Part 5: Building a WaveNet"
+  - video_id: kCc8FmEb1nY
+    slug: zero-to-hero-07-lets-build-gpt
+    title: "Let's build GPT: from scratch, in code, spelled out"
+  - video_id: zduSFxRajkE
+    slug: zero-to-hero-08-gpt-tokenizer
+    title: "Let's build the GPT Tokenizer"
+
+  # 后续主题演讲
+  - video_id: l8pRSuU81PU
+    slug: 2024-06-reproduce-gpt2-124m
+    title: "Let's reproduce GPT-2 (124M)"
+  - video_id: zjkBMFhNj_g
+    slug: 2023-11-intro-to-llms-1hr-talk
+    title: "Intro to Large Language Models (1-hour talk)"
+  - video_id: 7xTGNNLPyMI
+    slug: 2025-02-deep-dive-llms-chatgpt
+    title: "Deep Dive into LLMs like ChatGPT"
+  - video_id: EWvNQjAaOHw
+    slug: 2025-02-how-i-use-llms
+    title: "How I use LLMs"
+
+  # 外部访谈
+  - video_id: cdiD-9MMpb0
+    slug: 2022-10-lex-fridman-333-tesla-agi
+    title: "Lex Fridman #333: Tesla AI, Self-Driving, Optimus, Aliens, AGI"
+
+gists:
+  # GitHub gists（来自 https://gist.github.com/karpathy 的公开列表）
+  - id: 442a6bf555914893e9891c11519de94f
+    slug: llm-wiki-original
+    note: LLM Wiki 原 gist（本项目精神祖师）
+  - id: d4dee566867f8291f086
+    slug: min-char-rnn
+    note: "min-char-rnn.py — 纯 numpy 的 RNN 教学最简实现 (2015)"
+  - id: 587454dc0146a6ae21fc
+    slug: min-char-lstm
+    note: "min-char-lstm"
+  - id: 7bae8033dcf5ca2630ba
+    slug: twitter-recommendation-exploit
+    note: "Twitter follow reco exploit 分析"
+  - id: 8627fe009c40f57531cb18360106ce95
+    slug: microgpt-py
+    note: "microgpt.py — 200 行纯 Python 的 GPT 玩具"
+  - id: 1dd0294ef9567971c1e4348a90d69285
+    slug: add-to-zshrc
+    note: "add_to_zshrc.sh — 他的 shell 配置片段"
+  - id: e5d58e83d9fb6ce0827f0f66b253e6fe
+    slug: pytorch-strangeness
+    note: "pytorch_strangeness.py — PyTorch 反直觉行为记录"
+  - id: 00103b0037c5aaea32fe1da1af553355
+    slug: stable-diffusion-walk
+    note: "stablediffusionwalk.py — SD latent 插值可视化"
+  - id: 77fbb6a8dac5395f1b73e7a89300318d
+    slug: nes-py
+    note: "nes.py — Natural Evolution Strategies 最简实现"
+  - id: a4166c7fe253700972fcbc77e4ea32c5
+    slug: pg-pong
+    note: "pg-pong.py — Pong from Pixels 对应代码"
+  - id: f3ee599538ff78e1bbe9
+    slug: l2-normalization-layer
+    note: "L2 Normalization Layer (Caffe)"
+
+threads:
+  # 精选 tweets / X threads - 汇总到单一 markdown 文件
+  - url: https://x.com/karpathy/status/2004607146781278521
+    note: "never felt this behind as programmer (2025-12)"
+    tags: [programming, ai-shift, skill-issue]
+  - url: https://karpathy.ai/tweets.html
+    note: "Karpathy's self-curated fave tweets page"
+    tags: [meta]
