@@ -1,0 +1,49 @@
+# ====================================
+# LLM Wiki .gitignore
+# ====================================
+
+# 隐私笔记（CLAUDE.md 第七节隐私边界）
+raw/notes/private/
+
+# Obsidian 个性化配置（用户工作区）
+.obsidian/workspace*.json
+.obsidian/cache
+.obsidian/hotkeys.json
+.obsidian/graph.json
+.obsidian/snippets/
+
+# iCloud 临时文件
+**/.DS_Store
+**/Icon
+**/.fseventsd
+**/._*
+
+# Windows 临时文件
+**/Thumbs.db
+**/desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+
+# 锁文件（iCloud 同步防护）
+.wiki.lock
+
+# 运行时临时文件
+runs/**/*.tmp
+runs/**/*.partial
+
+# IDE
+.vscode/
+.idea/
+
+# 参考实现（可选：保留还是忽略？保留以便对照）
+# .reference/*/
+
+# 大文件（PDF 建议用 Git LFS 或仅 iCloud）
+raw/papers/*.pdf
+raw/web-clips/*.pdf

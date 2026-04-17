@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python scripts/*:*)",
+      "Bash(python3 scripts/*:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(find:*)",
+      "Read(./**)",
+      "Edit(wiki/**)",
+      "Edit(runs/**)",
+      "Edit(raw/_manifest.jsonl)",
+      "Write(wiki/**)",
+      "Write(runs/**)"
+    ],
+    "deny": [
+      "Edit(raw/papers/**)",
+      "Edit(raw/articles/**)",
+      "Edit(raw/gists/**)",
+      "Edit(raw/notes/**)",
+      "Edit(raw/web-clips/**)",
+      "Edit(raw/transcripts/**)",
+      "Write(raw/papers/**)",
+      "Write(raw/articles/**)",
+      "Write(raw/gists/**)",
+      "Write(raw/notes/**)",
+      "Write(raw/web-clips/**)",
+      "Write(raw/transcripts/**)",
+      "Read(../新媒体发布系统*/**)",
+      "Read(../云图Atlas工作系统/**)",
+      "Read(../国际贸易*/**)"
+    ]
+  }
+}

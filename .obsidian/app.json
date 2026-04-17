@@ -1,0 +1,14 @@
+{
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "shortest",
+  "useMarkdownLinks": false,
+  "promptDelete": true,
+  "attachmentFolderPath": "raw/attachments",
+  "userIgnoreFilters": [
+    "^\\.reference/",
+    "^runs/",
+    "^scripts/",
+    "^skills/",
+    "^templates/"
+  ]
+}
