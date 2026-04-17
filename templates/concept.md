@@ -32,8 +32,10 @@ updated: {{date:YYYY-MM-DD}}
 
 ## 与相关概念的关系
 
-- **与 [[X]] 的区别**：
-- **与 [[Y]] 的关系**：
+<!-- 用 Obsidian 双链，例：`[[rag]]`、`[[prompt-engineering]]` -->
+
+- **与 `<slug-X>` 的区别**：
+- **与 `<slug-Y>` 的关系**：
 
 ## 应用场景
 
@@ -46,8 +48,9 @@ updated: {{date:YYYY-MM-DD}}
 
 ## References
 
-- [[../../raw/<path>|<title>]]
+<!-- wiki-ingest 自动写入，指向 raw/ 下的源文件，格式：[[../../raw/<path>|<title>]] -->
 
 ## See Also
 
-- [[]]
+<!-- 首次提及其他实体/概念用 [[slug]] 双链 -->
+

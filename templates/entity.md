@@ -26,20 +26,17 @@ updated: {{date:YYYY-MM-DD}}
 
 ## 相关实体
 
-<!-- 首次提及必须建 [[slug]] 双链 -->
-
-- [[]]
+<!-- 首次提及必须建 Obsidian 双链，例：`[[claude-code]]`、`[[anthropic]]` -->
 
 ## 相关概念
 
-- [[]]
+<!-- 同上，例：`[[llm-wiki]]`、`[[prompt-engineering]]` -->
 
 ## References
 
-<!-- wiki-ingest 自动维护，指向 raw/ 下的源文件 -->
-
-- [[../../raw/<path>|<title>]]
+<!-- wiki-ingest 自动维护，格式：[[../../raw/<path>|<title>]] 指向 raw/ 下的源文件 -->
 
 ## See Also
 
-- [[]]
+<!-- 其他相关页 -->
+

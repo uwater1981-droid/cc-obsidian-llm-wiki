@@ -19,11 +19,11 @@ updated: {{date:YYYY-MM-DD}}
 
 ## 关键实体
 
-- [[]]
+<!-- 双链列表，例：`[[andrej-karpathy]]`、`[[claude-code]]` -->
 
 ## 关键概念
 
-- [[]]
+<!-- 双链列表，例：`[[llm-wiki]]`、`[[knowledge-compounding]]` -->
 
 ## 子主题
 
@@ -35,10 +35,7 @@ updated: {{date:YYYY-MM-DD}}
 
 ## 跨领域联系
 
-<!-- 链接到其他领域的 topic 页 -->
-
-- 与 [[topics/business/<slug>]] 的联系：
-- 与 [[topics/tech-ref/<slug>]] 的联系：
+<!-- 链接到其他领域的 topic 页，例：`[[minsu-sop]]`（business 域）、`[[claude-skill-patterns]]`（tech-ref 域）-->
 
 ## 时间线
 
@@ -48,8 +45,9 @@ updated: {{date:YYYY-MM-DD}}
 
 ## References
 
-- [[../../../raw/<path>|<title>]]
+<!-- wiki-ingest 自动维护，格式：[[../../../raw/<path>|<title>]] 指向 raw/ 下的源文件 -->
 
 ## See Also
 
-- [[]]
+<!-- 其他相关主题页 -->
+
