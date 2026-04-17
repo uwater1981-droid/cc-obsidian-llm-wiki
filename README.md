@@ -62,13 +62,22 @@ cp <某篇文章.md> raw/articles/
 
 ### 推荐 Obsidian 插件（已预配置在 `.obsidian/community-plugins.json`）
 
-首次启动需在 Settings → Community plugins → Browse 安装：
+**直接在社区市场搜名字安装**（全部核心功能只需这 3 个）：
 
 - **Dataview** — `wiki/index.md` 自动聚合四领域最新页
 - **Templater** — 新页自动套模板
 - **Tasks** — 识别 `- [ ] TODO` 支持陈旧检测
-- **Find Unlinked Files** — 孤岛二次验证
-- **Broken Links Cleaner** — 死链批量清理
+
+**通过 BRAT 补装**（这两个市场搜不到时用）：
+
+- **BRAT**（全称 Obsidian42 - BRAT，作者 TfTHacker）— 从 GitHub 直接装插件
+- 装完 BRAT 后它会**自动读取** `.obsidian/plugins/obsidian42-brat/data.json`，补装：
+  - **Find Unlinked Files** — 孤岛二次验证
+  - **Broken Links Cleaner** — 死链批量清理
+
+完整流程见 [docs/BRAT-setup.md](docs/BRAT-setup.md)。
+
+> 提示：`Find Unlinked Files` + `Broken Links Cleaner` 其实是**双保险**——我们的 `wiki-lint` skill + `scripts/link-graph.py` 已经做了同样的事。装不上也不影响核心功能。
 
 ---
 
