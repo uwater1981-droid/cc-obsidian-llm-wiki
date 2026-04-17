@@ -1,9 +1,13 @@
 """识别 wiki/ 中的陈旧内容。
 
-检查三类：
-1. 未勾选的 TODO：`- [ ] ...` 所在文件 mtime 超过 90 天
+检查两类：
+1. 未勾选的 TODO：`- [ ] ...` 所在文件 frontmatter updated 或 mtime 超过 90 天
 2. 陈旧页面：frontmatter updated 字段超过 180 天
-3. 过期 provenance: query-session 页（已有 ingest 覆盖原问题）
+
+安全性：
+- FRONTMATTER_PATTERN 支持 CRLF（Windows iCloud 常见）
+- UnicodeDecodeError 和 OSError 都记录 warning
+- 统一使用 CST 时区（与 icloud-lock.py 保持一致）
 
 遵守 CLAUDE.md：只读 wiki/。
 """
@@ -13,12 +17,14 @@ from __future__ import annotations
 import re
 import sys
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
+from typing import Literal
 
 
+CST = timezone(timedelta(hours=8))
 TODO_PATTERN = re.compile(r"^\s*-\s*\[\s*\]\s+(.+)$", re.MULTILINE)
-FRONTMATTER_PATTERN = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
+FRONTMATTER_PATTERN = re.compile(r"^---\r?\n(.*?)\r?\n---", re.DOTALL)
 UPDATED_PATTERN = re.compile(r"^updated:\s*(\S+)", re.MULTILINE)
 
 STALE_TODO_DAYS = 90
@@ -28,13 +34,13 @@ STALE_PAGE_DAYS = 180
 @dataclass
 class StaleItem:
     path: str
-    kind: str  # "todo" | "page"
+    kind: Literal["todo", "page"]
     detail: str
     age_days: int
 
 
 def parse_frontmatter_updated(text: str) -> datetime | None:
-    """提取 frontmatter 的 updated: 字段。"""
+    """提取 frontmatter 的 updated: 字段，返回 CST-aware datetime。"""
     fm_match = FRONTMATTER_PATTERN.match(text)
     if not fm_match:
         return None
@@ -43,25 +49,45 @@ def parse_frontmatter_updated(text: str) -> datetime | None:
     if not upd_match:
         return None
     try:
-        return datetime.strptime(upd_match.group(1), "%Y-%m-%d")
+        naive = datetime.strptime(upd_match.group(1), "%Y-%m-%d")
+        return naive.replace(tzinfo=CST)
     except ValueError:
         return None
 
 
+def file_age_days(md: Path, updated: datetime | None) -> int:
+    """优先用 frontmatter updated，否则用文件 mtime。"""
+    now = datetime.now(CST)
+    if updated is not None:
+        return (now - updated).days
+    mtime_naive = datetime.fromtimestamp(md.stat().st_mtime)
+    mtime = mtime_naive.replace(tzinfo=CST)
+    return (now - mtime).days
+
+
+def _read_md(md: Path) -> str | None:
+    """读取 md 文件，处理所有常见异常。"""
+    try:
+        return md.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        print(f"[warn] cannot decode {md}, skipping", file=sys.stderr)
+        return None
+    except OSError as e:
+        print(f"[warn] cannot read {md}: {e}", file=sys.stderr)
+        return None
+
+
 def scan_stale_todos(wiki_root: Path, threshold_days: int) -> list[StaleItem]:
-    """扫描所有 `- [ ] ...` 项，按文件 mtime 判断陈旧。"""
-    now = datetime.now()
+    """扫描所有 `- [ ] ...` 项，按 frontmatter updated 或文件 mtime 判断陈旧。"""
     items: list[StaleItem] = []
 
     for md in wiki_root.rglob("*.md"):
-        mtime = datetime.fromtimestamp(md.stat().st_mtime)
-        age = (now - mtime).days
-        if age < threshold_days:
+        text = _read_md(md)
+        if text is None:
             continue
-
-        try:
-            text = md.read_text(encoding="utf-8")
-        except UnicodeDecodeError:
+        updated = parse_frontmatter_updated(text)
+        age = file_age_days(md, updated)
+        if age < threshold_days:
             continue
 
         for todo_match in TODO_PATTERN.finditer(text):
@@ -76,21 +102,19 @@ def scan_stale_todos(wiki_root: Path, threshold_days: int) -> list[StaleItem]:
 
 def scan_stale_pages(wiki_root: Path, threshold_days: int) -> list[StaleItem]:
     """扫描 frontmatter updated 超过阈值的页。"""
-    now = datetime.now()
     items: list[StaleItem] = []
 
     for md in wiki_root.rglob("*.md"):
         if md.name.startswith("_"):
             continue
-        try:
-            text = md.read_text(encoding="utf-8")
-        except UnicodeDecodeError:
+        text = _read_md(md)
+        if text is None:
             continue
 
         updated = parse_frontmatter_updated(text)
         if updated is None:
             continue
-        age = (now - updated).days
+        age = (datetime.now(CST) - updated).days
         if age >= threshold_days:
             items.append(StaleItem(
                 path=str(md.relative_to(wiki_root.parent)).replace("\\", "/"),

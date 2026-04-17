@@ -3,7 +3,7 @@
   "newLinkFormat": "shortest",
   "useMarkdownLinks": false,
   "promptDelete": true,
-  "attachmentFolderPath": "raw/attachments",
+  "attachmentFolderPath": "wiki/_attachments",
   "userIgnoreFilters": [
     "^\\.reference/",
     "^runs/",

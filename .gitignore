@@ -47,3 +47,10 @@ runs/**/*.partial
 # 大文件（PDF 建议用 Git LFS 或仅 iCloud）
 raw/papers/*.pdf
 raw/web-clips/*.pdf
+
+# Obsidian 粘贴附件（图片等）不进 git
+wiki/_attachments/
+raw/attachments/
+
+# 本地个性化覆盖（可选，用户自行扩展）
+.claude/settings.override.json

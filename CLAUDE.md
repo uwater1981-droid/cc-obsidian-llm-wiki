@@ -65,7 +65,7 @@ runs/           # 操作日志（对齐云图 Atlas 模式）
 
 2. **wiki/** 可读可写
    - 每一页 frontmatter 必须含 `sources: [raw/...]` 字段（至少一条）
-   - 例外：query-session 归档页标注 `provenance: query-session`
+   - **例外**：页面 frontmatter 含 `provenance: query-session` 时，允许 `sources: []`（空列表）。此为唯一例外，详见第八节质量门禁。
    - 修改 wiki 页时必须同步更新 `updated: YYYY-MM-DD`
 
 3. **禁止跨层污染**
@@ -97,7 +97,7 @@ runs/           # 操作日志（对齐云图 Atlas 模式）
 | 操作 | 触发词 | 调用 skill |
 |---|---|---|
 | Ingest | 摄取 / 归档 / 入库 / ingest / 新文章 / 新笔记 / 处理 raw | `skills/wiki-ingest` |
-| Query | 什么是 / 解释 / 对比 / 查询 / 如何 / 问 wiki | `skills/wiki-query` |
+| Query | 什么是 / 解释 / 对比 / 查询 / 如何 / 综述 / 问 wiki | `skills/wiki-query` |
 | Lint | 巡检 / 体检 / lint / 健康检查 / 扫描 wiki | `skills/wiki-lint` |
 
 **Ingest 自动触发条件**：当 `raw/**` 出现新文件（与 manifest 对比发现增量）

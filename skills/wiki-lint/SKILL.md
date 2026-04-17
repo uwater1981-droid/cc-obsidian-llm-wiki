@@ -64,8 +64,9 @@ origin: local
 
 1. 提取所有 `- [ ] ...` 任务项
 2. 对每个任务项检查：
-   - 所在文件的 mtime
-   - 如果 `today - mtime > 90 天` → 提醒
+   - 优先使用 frontmatter `updated:` 字段（与 CLAUDE.md 命名约定一致）
+   - 缺少时回退到文件 mtime（注意：iCloud 同步可能更新 mtime）
+   - 如果 `today - (updated|mtime) > 90 天` → 提醒
 3. 提取 frontmatter `updated:` 字段：
    - 页面超过 180 天未更新 → HIGH 警告
 4. 严重级别：HIGH
@@ -78,12 +79,15 @@ origin: local
    - 对同目录页做 title+frontmatter `aliases` 的 shingle 相似度
    - 相似度 > 0.85 → 建议合并
 2. **Frontmatter 合规**：
-   - 缺 `sources` 字段（非 query-session 页）→ CRITICAL
+   - 缺 `sources` 字段（非 `provenance: query-session` 页）→ CRITICAL
+   - `provenance: query-session` 允许 `sources: []`（CLAUDE.md 例外条款）
    - 单页行数 > 800 → CRITICAL（建议拆分）
-3. **隐私泄漏检测**：
-   - grep wiki 页，看是否有 `raw/notes/private/` 路径被暴露在 Sources 字段
-   - 检查是否有连续 > 50 字片段出现在 private 原文中（需读私密文件做 diff）
-   - 严重级别：**CRITICAL**
+3. **隐私泄漏检测（不读私密文件）**：
+   - 纯脚本方案：**不把 private 原文读入 LLM 上下文**
+   - grep wiki 页：Sources / References 字段中是否出现 `raw/notes/private/` 路径字符串 → CRITICAL
+   - 长度检测：wiki 页中紧跟 `raw/notes/private/` 引用标记之后的连续引用块 > 50 字 → HIGH
+   - 如需深度比对（50 字片段匹配），通过独立 Python 脚本对比 SHA256 哈希前缀与字符数，**比对结果（计数+路径）**传入 LLM，**原文不传入**
+   - 严重级别：**CRITICAL**（路径暴露）/ HIGH（长度超限）
 
 ### Phase 5: Report Generation
 
