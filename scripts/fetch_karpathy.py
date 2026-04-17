@@ -138,9 +138,6 @@ def fetch_blog(url: str, slug: str) -> Path:
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
 
-    title_tag = soup.find("title")
-    title = title_tag.get_text(strip=True) if title_tag else slug
-
     main = (
         soup.find("article")
         or soup.find("main")
@@ -152,6 +149,22 @@ def fetch_blog(url: str, slug: str) -> Path:
 
     for tag in main.select("script, style, nav, header, footer, .site-header, .site-footer"):
         tag.decompose()
+
+    # Title extraction priority:
+    # 1. First h1 inside main (real post title on Jekyll/Bearblog)
+    # 2. Open Graph og:title meta (fallback)
+    # 3. <title> (often site-wide generic name — last resort)
+    title = ""
+    h1 = main.find("h1") if hasattr(main, "find") else None
+    if h1:
+        title = h1.get_text(strip=True)
+    if not title:
+        og = soup.find("meta", attrs={"property": "og:title"})
+        if og and og.get("content"):
+            title = og["content"].strip()
+    if not title:
+        title_tag = soup.find("title")
+        title = title_tag.get_text(strip=True) if title_tag else slug
 
     body_md = md(str(main), heading_style="ATX").strip()
 
